@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\ProduitRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -20,7 +22,7 @@ class Produit
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $Nom;
+    private $nom;
 
     /**
      * @ORM\Column(type="decimal", precision=5, scale=2)
@@ -28,7 +30,7 @@ class Produit
     private $prix;
 
     /**
-     * @ORM\Column(type="decimal", precision=4, scale=2)
+     * @ORM\Column(type="float")
      */
     private $tva;
 
@@ -42,6 +44,16 @@ class Produit
      */
     private $stock_max_commande;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Item::class, mappedBy="produit")
+     */
+    private $items;
+
+    public function __construct()
+    {
+        $this->items = new ArrayCollection();
+    }
+
     public function getId(): ?int
     {
         return $this->id;
@@ -49,12 +61,12 @@ class Produit
 
     public function getNom(): ?string
     {
-        return $this->Nom;
+        return $this->nom;
     }
 
-    public function setNom(string $Nom): self
+    public function setNom(string $nom): self
     {
-        $this->Nom = $Nom;
+        $this->nom = $nom;
 
         return $this;
     }
@@ -71,12 +83,12 @@ class Produit
         return $this;
     }
 
-    public function getTva(): ?string
+    public function getTva(): ?float
     {
         return $this->tva;
     }
 
-    public function setTva(string $tva): self
+    public function setTva(float $tva): self
     {
         $this->tva = $tva;
 
@@ -103,6 +115,36 @@ class Produit
     public function setStockMaxCommande(int $stock_max_commande): self
     {
         $this->stock_max_commande = $stock_max_commande;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Item[]
+     */
+    public function getItems(): Collection
+    {
+        return $this->items;
+    }
+
+    public function addItem(Item $item): self
+    {
+        if (!$this->items->contains($item)) {
+            $this->items[] = $item;
+            $item->setProduit($this);
+        }
+
+        return $this;
+    }
+
+    public function removeItem(Item $item): self
+    {
+        if ($this->items->removeElement($item)) {
+            // set the owning side to null (unless already changed)
+            if ($item->getProduit() === $this) {
+                $item->setProduit(null);
+            }
+        }
 
         return $this;
     }
