@@ -49,6 +49,11 @@ class Produit
      */
     private $items;
 
+    /**
+     * @ORM\Column(type="decimal", precision=5, scale=2)
+     */
+    private $pourcentage_tva;
+
     public function __construct()
     {
         $this->items = new ArrayCollection();
@@ -145,6 +150,18 @@ class Produit
                 $item->setProduit(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getPourcentageTva(): ?string
+    {
+        return $this->pourcentage_tva;
+    }
+
+    public function setPourcentageTva(string $pourcentage_tva): self
+    {
+        $this->pourcentage_tva = $pourcentage_tva;
 
         return $this;
     }
