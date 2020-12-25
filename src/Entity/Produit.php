@@ -30,7 +30,7 @@ class Produit
     private $prix;
 
     /**
-     * @ORM\Column(type="float")
+     * @ORM\Column(type="decimal", precision=5, scale=2)
      */
     private $tva;
 
@@ -48,11 +48,6 @@ class Produit
      * @ORM\OneToMany(targetEntity=Item::class, mappedBy="produit")
      */
     private $items;
-
-    /**
-     * @ORM\Column(type="decimal", precision=5, scale=2)
-     */
-    private $pourcentage_tva;
 
     public function __construct()
     {
@@ -88,12 +83,12 @@ class Produit
         return $this;
     }
 
-    public function getTva(): ?float
+    public function getTva(): ?string
     {
         return $this->tva;
     }
 
-    public function setTva(float $tva): self
+    public function setTva(string $tva): self
     {
         $this->tva = $tva;
 
@@ -154,15 +149,5 @@ class Produit
         return $this;
     }
 
-    public function getPourcentageTva(): ?string
-    {
-        return $this->pourcentage_tva;
-    }
 
-    public function setPourcentageTva(string $pourcentage_tva): self
-    {
-        $this->pourcentage_tva = $pourcentage_tva;
-
-        return $this;
-    }
 }

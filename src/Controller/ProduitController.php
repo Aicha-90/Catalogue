@@ -15,7 +15,7 @@ use Doctrine\ORM\EntityManagerInterface as EMI;
 class ProduitController extends AbstractController
 {
     /**
-     * @Route("/catalogue", name="catalogue")
+     * @Route("/accueil", name="accueil")
      */
     public function index(): Response
     {
@@ -24,6 +24,10 @@ class ProduitController extends AbstractController
         ]);
     }
 
+    /*
+    Question 1:
+    Voici les deux methodes permettant de calculer le montant ttc et le stock restant, cependant je n'arrive pas à les utiliser dans les autres fonctions du controlleur
+    */
     public function caluleTtc(int $prixHt, int $tva){
 
         $prixTtc=$prixHt+($prixHt*$tva/100);
@@ -38,8 +42,14 @@ class ProduitController extends AbstractController
 
     }
 
+    /*
+    Question 2:
+    Cette fonction permet bien d'ajouter les produits dans la base de donnee, ca marche !
+    la vue correspondante est dans template/produit/index.html.twig
+    */
+
     /**
-    * @Route("/catalogue/ajouter", name="ajouter_produit")
+    * @Route("/accueil/ajouter", name="ajouter_produit")
     * 
     */
     public function ajouterProduit(Request $request, EMI $em): Response
@@ -65,46 +75,12 @@ class ProduitController extends AbstractController
             $em->persist($produit);
             $em->flush();
 
+            return $this->redirectToRoute("accueil");
+
         }
-        return $this->redirectToRoute("catalogue");
-    }
-    
-    /*Faire une méthode total_ttc sur le modèle de panier permettant de calculer le montant total du
-panier du client.*/
-
-    /**
-    * @Route("/catalogue/panier/{id}", name="total_ttc")
-    *
-    */ 
-    
-    public function total_ttc(int $id, ItemRepository $item){
-       
-        $leTotalTtc=0;
-        //je récupère le panier grâce à l'id de item
-        $panierAcalculer = $item->find($id);
-
-        //j'accède à l'id du panier
-        $idPanier=$panierAcalculer->getCart()->getId();
         
-        //je récupère les données du panier dans une liste
-        $lesItems=$item->findByCart($idPanier);
-
-        //je récupère le nombre de produit diferant commandé
-        $nbProduit=count($lesItems);
-
-        //je fais une boucle sur chaque element du panier pour calculer le total ttc
-        for( $i=0;$i<=$nbProduit;$i++){
-            
-            $prixht=$panierAcalculer->getProduit()->getPrix();
-            $saTva=$panierAcalculer->getProduit()->getTva();
-            $quantite=$panierAcalculer->getQuantity();
-
-            $leTotalTtc+=($prixht+($prixht*$saTva/100))*$quantite;
-            
-        }
-
-        return $this->render('produit/index.html.twig', [ "totalTtc" => $leTotalTtc]);
-
+        return $this->render('produit/produit.html.twig');
     }
+
 
 }

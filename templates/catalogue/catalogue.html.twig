@@ -1,0 +1,58 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Catalogue{% endblock %}
+
+{% block body %}
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th scope="col">Produit</th>
+                <th scope="col">Prix</th>
+                <th scope="col">Quantité</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for le_produit in produits %}
+                {% if le_produit.id is defined %}
+                    <tr>
+                        <td>{{ le_produit.nom }}</td>
+                        <td>{{ ( (le_produit.prix * le_produit.tva / 100) + le_produit.prix ) |number_format(2) }}</td>
+                        <td>
+                            <select name="qte">
+                                {% set stock_restant = (le_produit.stockmaxcommande) - (le_produit.stockcommande) %}
+                                {% if stock_restant > 0 %}
+                                    {% for i in 1.. stock_restant %}
+                                        <option value="{{i}}">{{i}}</option>
+                                    {% endfor %}
+                                {% else %}
+                                    <option value="epuise">Epuisé</option>
+                                {% endif %}
+                            </select>
+                        </td>
+                    </tr>
+                {% endif %}
+            {% endfor %}
+        </tbody>
+        <tfoot>
+            <tr class="table-primary">
+                <td>TOTAL</td>
+                <td>12,58
+                    {% if totalTtc is defined %}
+                        {{ totalTtc }}
+                    {% endif %} €
+                </td>
+                <td>5
+                    {% if totalQte is defined %}
+                        {{ totalQte }}
+                    {% endif %}
+                </td>
+            </tr>
+        </tfoot>
+    </table>
+    <div class="totalTtc">
+        {% if totalTtc is defined %}
+            <p>{{ totalTtc }}</p>
+        {% endif %}
+    </div>
+
+{% endblock %}
