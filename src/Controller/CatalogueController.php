@@ -46,18 +46,19 @@ class CatalogueController extends AbstractController
     }
 
     /*
-    Question 3: creation des tables Cart et Item puis methode total_ttc
+    Question 3: creation des tables Cart et Item puis methode total_ttc, ici l'id a renseigner est celle de item
     */
 
     /**
-    * @Route("/catalogue/panier/{id}", name="calcule_total_ttc")
+    * @Route("/accueil/catalogue/panier/{id}", name="calcule_total_ttc")
     *
     */ 
-    public function total_ttc(int $id,ItemRepository $item){
+    public function total_ttc(int $id,ItemRepository $item, ProduitRepository $pr){
 
               
         //Initialisation
         $leTotalTtc=0;
+        $leTotalQte=0;
 
         //je récupère le panier grâce à l'id de item
         $panierAcalculer = $item->find($id);
@@ -68,7 +69,7 @@ class CatalogueController extends AbstractController
         //je récupère les données du panier dans une liste
         $lesItems=$item->findByCart($idPanier);
 
-        //je récupère le nombre de produit diferent commandé
+        //je récupère le nombre de produit different commandé
         $nbProduit=count($lesItems);
 
         //je fais une boucle sur chaque element du panier pour calculer le total ttc
@@ -79,10 +80,13 @@ class CatalogueController extends AbstractController
             $quantite=$panierAcalculer->getQuantity();
 
             $leTotalTtc+=($prixht+($prixht*$saTva/100))*$quantite;
+            $leTotalQte+=$quantite;
             
         }
 
-        return $this->render('catalogue/catalogue.html.twig', [ "totalTtc" => $leTotalTtc, "totalQte" => $leTotalQte]);
+        $lesProduits=$pr->findAll();
+
+        return $this->render('catalogue/catalogue.html.twig', [ "totalTtc" => $leTotalTtc, "totalQte" => $leTotalQte, "produits" => $lesProduits]);
 
     }
 

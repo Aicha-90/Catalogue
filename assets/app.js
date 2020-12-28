@@ -16,20 +16,29 @@ require('bootstrap');
 /************************** DEBUT  */
 
 
-/*
-$("select").click(function(){
+$("select").change(function(){ // a chaque fois qu'on saisie une autre quantite
     var qte=0
     var total=0
 
-    $( "select option:selected" ).each(function() {
-        qte+=parseInt($(this).val());
-        total+=parseInt($(this).val());
+    $( "select option:selected" ).each(function() { // je fais une boucle sur toutes les quantites selectionnées <option>
+
+        var quantites =$(this).val(); //je récupère la valeur des options
+    
+        if( quantites != "0"){ // si la quantite d'une option n'est pas egale à 0
+                    
+            qte+=parseInt(quantites); // je fais la somme des quantites
+            var prix=$(this).parent().attr("class");// et récupère la valeur de la class de son parent, car sa valeur correspond au prix ttc du produit. C'est comme ca que j'ai fait dans le fichier catalogue.html.twig
+            
+            total+=parseInt(quantites)*prix ; // je calcule le total ttc
+
+        }
     })
 
-    $("#total").text(total);
+    // je remplace les champs #total et #quantity par le resulatat
+    $("#total").text(total.toFixed(2) + " €");
     $("#quantity").text(qte);
+
 })
-*/
 
 
 
