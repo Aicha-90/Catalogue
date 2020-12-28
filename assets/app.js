@@ -12,3 +12,24 @@ import './styles/app.css';
 const $ = require('jquery');
 require('bootstrap');
 
+
+/************************** DEBUT  */
+
+
+/*
+$("select").click(function(){
+    var qte=0
+    var total=0
+
+    $( "select option:selected" ).each(function() {
+        qte+=parseInt($(this).val());
+        total+=parseInt($(this).val());
+    })
+
+    $("#total").text(total);
+    $("#quantity").text(qte);
+})
+*/
+
+
+

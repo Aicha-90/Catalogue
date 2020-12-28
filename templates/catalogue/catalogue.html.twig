@@ -3,6 +3,7 @@
 {% block title %}Catalogue{% endblock %}
 
 {% block body %}
+    <form method="POST" action="">
     <table class="table table-striped">
         <thead>
             <tr>
@@ -21,6 +22,7 @@
                             <select name="qte">
                                 {% set stock_restant = (le_produit.stockmaxcommande) - (le_produit.stockcommande) %}
                                 {% if stock_restant > 0 %}
+                                        <option value="0"></option>
                                     {% for i in 1.. stock_restant %}
                                         <option value="{{i}}">{{i}}</option>
                                     {% endfor %}
@@ -36,23 +38,23 @@
         <tfoot>
             <tr class="table-primary">
                 <td>TOTAL</td>
-                <td>12,58
+                <td id="total">
                     {% if totalTtc is defined %}
                         {{ totalTtc }}
+                    {% else %}
+                        0,00
                     {% endif %} €
                 </td>
-                <td>5
+                <td id="quantity"> 
                     {% if totalQte is defined %}
                         {{ totalQte }}
+                    {% else %}
+                        0
                     {% endif %}
                 </td>
             </tr>
         </tfoot>
     </table>
-    <div class="totalTtc">
-        {% if totalTtc is defined %}
-            <p>{{ totalTtc }}</p>
-        {% endif %}
-    </div>
-
+    <button type="submit" name="submit" class="btn btn-primary">Commander</button>
+    </form>
 {% endblock %}
