@@ -30,15 +30,29 @@ $("select").change(function(){ // a chaque fois qu'on saisie une autre quantite
             var prix=$(this).parent().attr("class");// et récupère la valeur de la class de son parent, car sa valeur correspond au prix ttc du produit. C'est comme ca que j'ai fait dans le fichier catalogue.html.twig
             
             total+=parseInt(quantites)*prix ; // je calcule le total ttc
+        
+            //Traitement ajax
+            var idPanier=parseInt($("table").attr('id'));
+            var idProd = parseInt($(this).parent().attr('id'));
 
-        }
-    })
+            //Pour l'ajout ou mise à jour des items dans la BDD grâzce à la méthode AJAX
+            $.ajax({
+                method: "POST",
+                url: "/accueil/catalogue/" + idPanier + "/" + idProd + "/" + quantites + "",
+                success: function(){
+                    console.log("envoyé");   
+                }
+            });//fin ajax
 
-    // je remplace les champs #total et #quantity par le resulatat
+        }//fin du if
+
+    })//fin du each
+
+    // je remplace les champs #total et #quantity par le resultat
     $("#total").text(total.toFixed(2) + " €");
     $("#quantity").text(qte);
 
-})
+})//fin du change
 
 
 

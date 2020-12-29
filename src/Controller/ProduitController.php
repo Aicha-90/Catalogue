@@ -45,7 +45,7 @@ class ProduitController extends AbstractController
     /*
     Question 2:
     Cette fonction permet bien d'ajouter les produits dans la base de donnee, ca marche !
-    la vue correspondante est dans template/produit/index.html.twig
+    la vue correspondante est dans template/produit/produit.html.twig
     */
 
     /**

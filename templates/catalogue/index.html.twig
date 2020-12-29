@@ -14,7 +14,9 @@
     Bienvenue au Catalogue de fruits et legumes:
     <ul>
         <li><a href="{{ path("ajouter_produit") }}">Ajouter des produits</a></code></li>
-        <li><a href="{{ path("catalogue") }}">Commander des produits</a></code></li>
+        {% set aucunProduit = 0 %}
+        {% set aucuneQte = 0 %}
+        <li><a href="{{ path("catalogue", {id: idPanier, idProd: aucunProduit, qte: aucuneQte})  }}">Commander des produits</a></code></li>
     </ul>
 </div>
 {% endblock %}

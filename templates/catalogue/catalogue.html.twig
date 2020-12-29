@@ -3,8 +3,8 @@
 {% block title %}Catalogue{% endblock %}
 
 {% block body %}
-    <form method="POST" action="">
-    <table class="table table-striped">
+    <form method="POST" action="{{path("catalogue_commander", {id: panier.id })}}">
+    <table class="table table-striped" id="{{panier.id}}">
         <thead>
             <tr>
                 <th scope="col">Produit</th>
@@ -20,15 +20,17 @@
                         <td>{{ ( (le_produit.prix * le_produit.tva / 100) + le_produit.prix ) |number_format(2) }}</td>
                         <td>
                             {% set prixTtc = ( (le_produit.prix * le_produit.tva / 100) + le_produit.prix ) |number_format(2) %}
-                            <select name="qte" class={{prixTtc}}>
+                            <select name="qte" class={{prixTtc}} id="{{le_produit.id}}">
                                 {% set stock_restant = (le_produit.stockmaxcommande) - (le_produit.stockcommande) %}
                                     <option value="0" selected="selected"></option>
                                 {% if stock_restant > 0 %}
                                     {% for i in 0.. stock_restant %}
-                                        <option value="{{i}}" class="{{le_produit.prix}}">{{i}}</option>
+                                        <option value="{{i}}" class="{{le_produit.prix}}">
+                                            {{i}}</a>
+                                        </option>
                                     {% endfor %}
                                 {% else %}
-                                    <option value="epuise">Epuisé</option>
+                                    <option value="0">0</option>
                                 {% endif %}
                             </select>
                         </td>
@@ -40,18 +42,10 @@
             <tr class="table-primary">
                 <td>TOTAL</td>
                 <td id="total">
-                    {% if totalTtc is defined %}
-                        <input class="inputTotal" name="totalttc" value="{{ totalTtc |number_format(2)}}">
-                    {% else %}
-                        0,00
-                    {% endif %} €
+                        0,00 €
                 </td>
                 <td id="quantity"> 
-                    {% if totalQte is defined %}
-                        {{ totalQte }}
-                    {% else %}
                         0
-                    {% endif %}
                 </td>
             </tr>
         </tfoot>
